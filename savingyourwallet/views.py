@@ -50,12 +50,12 @@ def Home_View(request,*args, **kwargs):
     todays_date = datetime.date.today()
     Last_30days_ago = todays_date-datetime.timedelta(days=30)
     Last_30days_expenses = Expense.objects.filter(owner=request.user,date__gte=Last_30days_ago, date__lte=todays_date)
-    totalexpense = Last_30days_expenses.aggregate(Sum('amount')) or 0
+    totalexpense = Last_30days_expenses.aggregate(Sum('amount')).get('amount__sum') or 0)
     income = UserIncome.objects.filter(owner=request.user)
     Last_30days_income = UserIncome.objects.filter(owner=request.user,date__gte=Last_30days_ago, date__lte=todays_date)
-    totalincome = Last_30days_income.aggregate(Sum('amount')) or 0
+    totalincome = Last_30days_income.aggregate(Sum('amount')).get('amount__sum') or 0)
     totalincome = income.aggregate(Sum('amount'))
-    totalleft = totalincome['amount__sum'] - totalexpense['amount__sum'] or 0
+    totalleft = totalincome - totalexpense
     paginator = Paginator(expenses, 5)
     page_number = request.GET.get('page')
     page_obj = Paginator.get_page(paginator, page_number)
@@ -68,8 +68,8 @@ def Home_View(request,*args, **kwargs):
         'expenses': expenses,
         'page_obj': page_obj,
         'currency': currency,
-        'totalexpense':totalexpense['amount__sum'],
-        'totalincome':totalincome['amount__sum'],
+        'totalexpense':totalexpense,
+        'totalincome':totalincome,
         'totalleft':totalleft,
         'title':'Expense Page'
     }
