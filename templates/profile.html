@@ -1,0 +1,30 @@
+{% extends "nosidebarnav.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="content-section col-md-8">
+    <div class="container mt-2">
+        <div class="row">
+          <div class="col-md-10">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <a href="{% url 'ExpensePage' %}">Homepage</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  Profile
+                </li>
+              </ol>
+            </nav>
+          </div>
+    <form method="POST" enctype="multipart/form-data" action="{% url 'ProfilePage' %}">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Profile Info</legend>
+            {{ u_form|crispy }}
+        </fieldset>
+        <div class="form-group mt-3">
+            <button class="btn btn-outline-info" type="submit">Update</button>
+        </div>
+    </form>
+  </div>
+{% endblock content %}

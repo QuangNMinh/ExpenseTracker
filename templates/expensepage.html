@@ -1,0 +1,148 @@
+{% extends "basenav.html" %}
+{% load static %}
+{% block content %}
+
+<section class="section section-expenses">
+  <div class="container mt-2">
+    <div class="row">
+      <div class="col-md-10">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="{% url 'ExpensePage' %}">Homepage</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+              My Expenses
+            </li>
+          </ol>
+        </nav>
+      </div>
+      
+      
+    </div>
+    
+    <div class="container">
+      {% if expenses.count %}
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <input type="text" class="form-control" id="searchField" placeholder="Search">
+          </div>
+        </div>
+        <div class="col-md-5"></div>
+        <div class="col-md-auto">
+          <a href="{% url 'Export-Expense'%}" class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+              <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+              <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+            </svg>
+          </a>
+        </div>
+        <div class="col-md-2">
+          <a href="{% url 'Add-Expense'%}" class="btn btn-primary">Add Expense</a>
+        </div>
+      </div>
+  <div class="app-table">
+    <table class="table table-stripped table-hover">
+      <thead>
+        <tr>
+          <th>
+            Amount ({{currency}})
+
+          </th>
+          <th>Category</th>
+          <th>Description</th>
+          <th>Date</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+  
+      <tbody>
+        {% for expense in page_obj%}
+        <tr>
+          <td>{{expense.amount}}</td>
+          <td>{{expense.category}}</td>
+          <td>{{expense.description}}</td>
+          <td>{{expense.date}}</td>
+  
+          <td>
+            <a href="{% url 'Edit-Expense' expense.id %}"class="btn btn-secondary btn-sm">
+              Edit
+            </a>
+          </td>
+          <td class="align-item-center">
+          <a href="{% url 'Expense-Delete' expense.id %}" onclick="return confirmDeleted();">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+          </a>
+        </td>
+        </tr>
+  
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p class="no-results" style="display: none;">No results </p>
+    <div class="table-output">
+      <table class="table table-stripped table-hover">
+        <thead>
+          <tr>
+            <th>
+              Amount ({{currency}})
+            </th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Edit</th>
+          <th>Delete</th>
+          </tr>
+        </thead>
+
+        <tbody  class="table-body">
+
+
+        </tbody>
+      </table>
+    </div>
+
+
+
+  
+      <div class="pagination-container">
+      <div class="">
+        Showing page {{page_obj.number}} of {{ page_obj.paginator.num_pages }}
+      </div>
+      <ul class="pagination align-right float-right mr-auto">
+        {% if page_obj.has_previous %}
+        <li {% if page_obj.number == 1 %} class="page-item active" {% endif %}><a class="page-link" href="?page=1">&laquo; 1</a></li>
+        <li class="page-item"> <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+        {% endif %}
+  
+        {% if page_obj.has_next %}
+        <li class="page-item"> <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+        <li class="page-item"> <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages}} &raquo;</a></li>
+        {% endif %}
+  
+  
+        </ul>
+      {% endif %}
+    </div>
+  </div>
+  </div>
+    
+</section>
+<script>
+  function confirmDeleted() {
+      var r = confirm("Are you sure you would like to delete this?");
+      if (r) {
+          return true;
+      } else {
+          return false;
+      }
+  }
+</script>
+<script src="{% static 'js/searchExpense.js' %}"></script>
+{% endblock %}

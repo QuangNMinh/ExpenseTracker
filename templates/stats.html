@@ -1,0 +1,37 @@
+{% extends 'nosidebarnav.html' %}
+{% load static %}
+{% block content %}
+<div class="container mt-2">
+  <div class="row">
+    <div class="col-md-10">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="{% url 'ExpensePage' %}">Expenses</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+           Summary
+          </li>
+        </ol>
+      </nav>
+    </div>
+
+  </div>
+
+ <div class="row">
+<div class="col-md-4">
+ <canvas id="myChart" width="200" height="200"></canvas>
+    </div>
+    <div class="col-md-4">
+        <canvas id="myChart2" width="200" height="200"></canvas>
+    </div>
+
+ </div>
+</div>
+
+<script src="{% static 'js/expensechart.js' %}"></script>
+<script src="{% static 'js/incomechart.js' %}"></script>
+
+</script>
+
+{% endblock content %}

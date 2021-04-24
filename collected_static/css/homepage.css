@@ -1,0 +1,34 @@
+footer.footer {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    color: #fff;
+}
+.gradient{
+  background: rgb(6,190,182);
+  background: linear-gradient(180deg, rgba(6,190,182,1) 0%, rgba(72,177,191,0.5830707282913166) 100%);
+}
+ .page-header{
+      margin-top: 3rem;
+      font-size: 1.25rem;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+.d-flex{
+    margin-bottom: auto;
+}
+main{
+  margin-top: 6rem;
+}
+
+[role="main"] {
+  padding-top: 133px; /* Space for fixed navbar */
+}
+
+@media (min-width: 768px) {
+  [role="main"] {
+    padding-top: 48px; /* Space for fixed navbar */
+  }
+}

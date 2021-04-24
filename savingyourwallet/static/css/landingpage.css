@@ -1,0 +1,43 @@
+footer.footer {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  color: #fff;
+}
+.gradient{
+background: rgb(6,190,182);
+background: linear-gradient(180deg, rgba(6,190,182,1) 0%, rgba(72,177,191,0.5830707282913166) 100%);
+}
+.page-header{
+	margin-top: 3rem;
+	font-size: 1.25rem;
+}
+.feature ul{
+	padding-left: 2rem;
+	list-style-type: none; 
+}
+.feature ul li {
+  padding-left: 2rem;
+  background-image: url(../img/check.svg);
+  background-repeat: no-repeat;
+  line-height: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.icon {
+  height: 5rem;
+  width: 5rem;
+  font-size: 1.75rem;
+  border-radius: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.icons{
+  padding-top: 7rem;
+  padding-bottom: 7rem;
+}
+
+a {
+  color: #fff;
+  text-decoration: none;
+}
