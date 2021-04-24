@@ -55,7 +55,7 @@ def Home_View(request,*args, **kwargs):
     Last_30days_income = UserIncome.objects.filter(owner=request.user,date__gte=Last_30days_ago, date__lte=todays_date)
     totalincome = Last_30days_income.aggregate(Sum('amount'))
     totalincome = income.aggregate(Sum('amount'))
-    totalleft = totalincome['amount__sum'] - totalexpense['amount__sum']
+    totalleft = totalincome['amount__sum'] - totalexpense['amount__sum'] or 0
     paginator = Paginator(expenses, 5)
     page_number = request.GET.get('page')
     page_obj = Paginator.get_page(paginator, page_number)
