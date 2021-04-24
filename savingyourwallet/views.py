@@ -50,10 +50,18 @@ def Home_View(request,*args, **kwargs):
     todays_date = datetime.date.today()
     Last_30days_ago = todays_date-datetime.timedelta(days=30)
     Last_30days_expenses = Expense.objects.filter(owner=request.user,date__gte=Last_30days_ago, date__lte=todays_date)
-    totalexpense = Last_30days_expenses.aggregate(Sum('amount')).get('amount__sum') or 0)
+    totalexpense = None
+    try:
+        totalexpense = Last_30days_expenses.aggregate(Sum('amount')).get('amount__sum'))
+    except not totalexpense:
+        totalexpense = 0
     income = UserIncome.objects.filter(owner=request.user)
     Last_30days_income = UserIncome.objects.filter(owner=request.user,date__gte=Last_30days_ago, date__lte=todays_date)
-    totalincome = Last_30days_income.aggregate(Sum('amount')).get('amount__sum') or 0)
+    totalincome = None
+    try:
+        totalincome = Last_30days_income.aggregate(Sum('amount')).get('amount__sum')
+    except not totalincome:
+        totalexpense = 0
     totalincome = income.aggregate(Sum('amount'))
     totalleft = totalincome - totalexpense
     paginator = Paginator(expenses, 5)
