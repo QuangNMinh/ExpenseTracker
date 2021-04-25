@@ -49,20 +49,28 @@ def Home_View(request,*args, **kwargs):
     expenses = Expense.objects.filter(owner=request.user)
     todays_date = datetime.date.today()
     Last_30days_ago = todays_date-datetime.timedelta(days=30)
-    Last_30days_expenses = Expense.objects.filter(owner=request.user,date__gte=Last_30days_ago, date__lte=todays_date)
+    Last_30days_expenses = 0
     totalexpense = 0
     try:
+        Last_30days_expenses = Expense.objects.filter(owner=request.user,date__gte=Last_30days_ago, date__lte=todays_date)
         totalexpense = Last_30days_expenses.aggregate(Sum('amount')).get('amount__sum')
-    except not totalexpense:
+    except not totalexpense and ObjectDoesNotExist:
         totalexpense = 0
+        Last_30days_expenses = 0
     income = UserIncome.objects.filter(owner=request.user)
-    Last_30days_income = UserIncome.objects.filter(owner=request.user,date__gte=Last_30days_ago, date__lte=todays_date)
+    Last_30days_income = 0
     totalincome = 0
     try:
+        Last_30days_income = UserIncome.objects.filter(owner=request.user,date__gte=Last_30days_ago, date__lte=todays_date)
         totalincome = Last_30days_income.aggregate(Sum('amount')).get('amount__sum')
-    except not totalincome:
+    except not totalincome and ObjectDoesNotExist:
         totalincome = 0
-    totalleft = totalincome - totalexpense
+        Last_30days_income = 0
+    totalleft = 0
+    try:
+        totalleft = totalincome - totalexpense
+    except not totalleft:
+        totalleft = 0
     paginator = Paginator(expenses, 5)
     page_number = request.GET.get('page')
     page_obj = Paginator.get_page(paginator, page_number)
