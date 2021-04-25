@@ -22,7 +22,6 @@
     </div>
     
     <div class="container">
-      {% if expenses.count %}
       <div class="row">
         <div class="col-md-4">
           <div class="form-group">
@@ -42,6 +41,7 @@
           <a href="{% url 'Add-Expense'%}" class="btn btn-primary">Add Expense</a>
         </div>
       </div>
+      {% if expenses.count %}
   <div class="app-table">
     <table class="table table-stripped table-hover">
       <thead>

@@ -54,8 +54,8 @@ def Home_View(request,*args, **kwargs):
     try:
         Last_30days_expenses = Expense.objects.filter(owner=request.user,date__gte=Last_30days_ago, date__lte=todays_date)
         totalexpense = Last_30days_expenses.aggregate(Sum('amount')).get('amount__sum')
-    except not totalexpense and ObjectDoesNotExist:
-        totalexpense = 0
+    except not totalexpense:
+        totalexpense = 1
         Last_30days_expenses = 0
     income = UserIncome.objects.filter(owner=request.user)
     Last_30days_income = 0
@@ -63,14 +63,19 @@ def Home_View(request,*args, **kwargs):
     try:
         Last_30days_income = UserIncome.objects.filter(owner=request.user,date__gte=Last_30days_ago, date__lte=todays_date)
         totalincome = Last_30days_income.aggregate(Sum('amount')).get('amount__sum')
-    except not totalincome and ObjectDoesNotExist:
+    except not totalincome:
         totalincome = 0
         Last_30days_income = 0
-    totalleft = 0
-    try:
-        totalleft = totalincome - totalexpense
-    except not totalleft:
+    if not totalincome and not totalexpense:
         totalleft = 0
+    elif not totalexpense:
+        totalexpense = 0
+        totalleft = totalincome - totalexpense
+    elif not totalincome:
+        totalincome = 0
+        totalleft = 0
+    else:
+        totalleft = totalincome - totalexpense
     paginator = Paginator(expenses, 5)
     page_number = request.GET.get('page')
     page_obj = Paginator.get_page(paginator, page_number)
@@ -225,12 +230,33 @@ def Income_View(request,*args, **kwargs):
     expenses = Expense.objects.filter(owner=request.user)
     todays_date = datetime.date.today()
     Last_30days_ago = todays_date-datetime.timedelta(days=30)
-    Last_30days_expenses = Expense.objects.filter(owner=request.user,date__gte=Last_30days_ago, date__lte=todays_date)
-    totalexpense = Last_30days_expenses.aggregate(Sum('amount'))
+    Last_30days_expenses = 0
+    totalexpense = 0
+    try:
+        Last_30days_expenses = Expense.objects.filter(owner=request.user,date__gte=Last_30days_ago, date__lte=todays_date)
+        totalexpense = Last_30days_expenses.aggregate(Sum('amount')).get('amount__sum')
+    except not totalexpense:
+        totalexpense = 1
+        Last_30days_expenses = 0
     income = UserIncome.objects.filter(owner=request.user)
-    Last_30days_income = UserIncome.objects.filter(owner=request.user,date__gte=Last_30days_ago, date__lte=todays_date)
-    totalincome = Last_30days_income.aggregate(Sum('amount'))
-    totalleft = totalincome['amount__sum'] - totalexpense['amount__sum']
+    Last_30days_income = 0
+    totalincome = 0
+    try:
+        Last_30days_income = UserIncome.objects.filter(owner=request.user,date__gte=Last_30days_ago, date__lte=todays_date)
+        totalincome = Last_30days_income.aggregate(Sum('amount')).get('amount__sum')
+    except not totalincome:
+        totalincome = 0
+        Last_30days_income = 0
+    if not totalincome and not totalexpense:
+        totalleft = 0
+    elif not totalexpense:
+        totalexpense = 0
+        totalleft = totalincome - totalexpense
+    elif not totalincome:
+        totalincome = 0
+        totalleft = 0
+    else:
+        totalleft = totalincome - totalexpense
     paginator = Paginator(income, 5)
     page_number = request.GET.get('page')
     page_obj = Paginator.get_page(paginator, page_number)
@@ -243,8 +269,8 @@ def Income_View(request,*args, **kwargs):
         'income': income,
         'page_obj': page_obj,
         'currency': currency,
-        'totalexpense':totalexpense['amount__sum'],
-        'totalincome':totalincome['amount__sum'],
+        'totalexpense':totalexpense,
+        'totalincome':totalincome,
         'totalleft':totalleft,
         'title':'Income Page'
     }

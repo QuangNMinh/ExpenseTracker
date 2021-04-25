@@ -22,7 +22,7 @@
 
    <div class="container">
 
-    {% if income.count %}
+    
 
     <div class="row">
       <div class="col-md-4">
@@ -43,6 +43,7 @@
         <a href="{% url 'Add-Income'%}" class="btn btn-primary">Add Income</a>
       </div>
      </div>
+     {% if income.count %}
 <div class="app-table">
   <table class="table table-stripped table-hover">
     <thead>

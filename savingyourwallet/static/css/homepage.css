@@ -1,8 +1,5 @@
-footer.footer {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-    color: #fff;
-}
+@import "navbar-fixed";
+
 .gradient{
   background: rgb(6,190,182);
   background: linear-gradient(180deg, rgba(6,190,182,1) 0%, rgba(72,177,191,0.5830707282913166) 100%);
@@ -31,4 +28,23 @@ main{
   [role="main"] {
     padding-top: 48px; /* Space for fixed navbar */
   }
+}
+.sidebar-item {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+.sidebar-section {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+.make-me-sticky {
+  position: -webkit-sticky;
+	position: sticky;
+	top: 0;
+    
+  padding: 0 15px;
 }
