@@ -52,7 +52,7 @@ def Home_View(request,*args, **kwargs):
     Last_30days_expenses = Expense.objects.filter(owner=request.user,date__gte=Last_30days_ago, date__lte=todays_date)
     totalexpense = None
     try:
-        totalexpense = Last_30days_expenses.aggregate(Sum('amount')).get('amount__sum'))
+        totalexpense = Last_30days_expenses.aggregate(Sum('amount')).get('amount__sum')
     except not totalexpense:
         totalexpense = 0
     income = UserIncome.objects.filter(owner=request.user)
@@ -61,7 +61,7 @@ def Home_View(request,*args, **kwargs):
     try:
         totalincome = Last_30days_income.aggregate(Sum('amount')).get('amount__sum')
     except not totalincome:
-        totalexpense = 0
+        totalincome = 0
     totalincome = income.aggregate(Sum('amount'))
     totalleft = totalincome - totalexpense
     paginator = Paginator(expenses, 5)
