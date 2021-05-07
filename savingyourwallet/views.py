@@ -52,7 +52,9 @@ def Home_View(request,*args, **kwargs):
     Last_30days_expenses = 0
     totalexpense = 0
     try:
-        Last_30days_expenses = Expense.objects.filter(owner=request.user,date__gte=Last_30days_ago, date__lte=todays_date)
+        Last_30days_expenses = Expense.objects.filter(owner=request.user,
+                                                      date__gte=Last_30days_ago,
+                                                      date__lte=todays_date)
         totalexpense = Last_30days_expenses.aggregate(Sum('amount')).get('amount__sum')
     except not totalexpense:
         totalexpense = 1
@@ -61,21 +63,33 @@ def Home_View(request,*args, **kwargs):
     Last_30days_income = 0
     totalincome = 0
     try:
-        Last_30days_income = UserIncome.objects.filter(owner=request.user,date__gte=Last_30days_ago, date__lte=todays_date)
+        Last_30days_income = UserIncome.objects.filter(owner=request.user,
+                                                       date__gte=Last_30days_ago, 
+                                                       date__lte=todays_date)
         totalincome = Last_30days_income.aggregate(Sum('amount')).get('amount__sum')
     except not totalincome:
+        percent = 0 
         totalincome = 0
         Last_30days_income = 0
     if not totalincome and not totalexpense:
+        percent = 0
         totalleft = 0
     elif not totalexpense:
+        percent = 0
         totalexpense = 0
         totalleft = totalincome - totalexpense
     elif not totalincome:
+        percent = 0
         totalincome = 0
         totalleft = 0
     else:
+        percent = (totalexpense/totalincome)*100
         totalleft = totalincome - totalexpense
+    if 100 > percent >= 80:
+        messages.warning(request, 'Your expense is taking up '+ str(percent) +'% of your income, please conside cutting down your expense or increase your income')
+    elif percent > 100:
+        percent_more=percent-100
+        messages.warning(request, 'Your expense is higher than your income by '+ str(percent_more) +'%, please conside cutting down your expense or increase your income')
     paginator = Paginator(expenses, 5)
     page_number = request.GET.get('page')
     page_obj = Paginator.get_page(paginator, page_number)
@@ -85,13 +99,9 @@ def Home_View(request,*args, **kwargs):
     except ObjectDoesNotExist:
         currency = "USD - United States Dollar"
     context = {
-        'expenses': expenses,
-        'page_obj': page_obj,
-        'currency': currency,
-        'totalexpense':totalexpense,
-        'totalincome':totalincome,
-        'totalleft':totalleft,
-        'title':'Expense Page'
+        'expenses': expenses,'page_obj': page_obj,'currency': currency,
+        'totalexpense':totalexpense,'totalincome':totalincome,'totalleft':totalleft,
+        'percent':percent,'title':'Expense Page'
     }
     return render(request,"expensepage.html",context)
 #Search expense
@@ -245,18 +255,28 @@ def Income_View(request,*args, **kwargs):
         Last_30days_income = UserIncome.objects.filter(owner=request.user,date__gte=Last_30days_ago, date__lte=todays_date)
         totalincome = Last_30days_income.aggregate(Sum('amount')).get('amount__sum')
     except not totalincome:
+        percent = 0 
         totalincome = 0
         Last_30days_income = 0
     if not totalincome and not totalexpense:
+        percent = 0
         totalleft = 0
     elif not totalexpense:
+        percent = 0
         totalexpense = 0
         totalleft = totalincome - totalexpense
     elif not totalincome:
+        percent = 0
         totalincome = 0
         totalleft = 0
     else:
+        percent = (totalexpense/totalincome)*100
         totalleft = totalincome - totalexpense
+    if 100> percent >= 80:
+        messages.warning(request, 'Your expense is taking up '+ str(percent) +'% of your income, please conside cutting down your expense or increase your income')
+    elif percent > 100:
+        percent_more=percent-100
+        messages.warning(request, 'Your expense is higher than your income by '+ str(percent_more) +'%, please conside cutting down your expense or increase your income')
     paginator = Paginator(income, 5)
     page_number = request.GET.get('page')
     page_obj = Paginator.get_page(paginator, page_number)
@@ -272,6 +292,7 @@ def Income_View(request,*args, **kwargs):
         'totalexpense':totalexpense,
         'totalincome':totalincome,
         'totalleft':totalleft,
+        'percent':percent,
         'title':'Income Page'
     }
     return render(request, 'incomepage.html', context)
@@ -432,7 +453,9 @@ def Preference_View(request,*args, **kwargs):
         user_preferences = UserPreference.objects.get(user=request.user)
     if request.method == 'GET':
 
-        return render(request, 'preference.html', {'currencies': currency_data,'user_preferences': user_preferences,'title':'Preference Page'})
+        return render(request, 'preference.html', {'currencies': currency_data,
+                                                    'user_preferences': user_preferences,
+                                                    'title':'Preference Page'})
     else:
 
         currency = request.POST['currency']
@@ -442,7 +465,9 @@ def Preference_View(request,*args, **kwargs):
         else:
             UserPreference.objects.create(user=request.user, currency=currency)
         messages.success(request, 'Changes saved')
-        return render(request, 'preference.html', {'currencies': currency_data, 'user_preferences': user_preferences,'title':'Preference Page'})
+        return render(request, 'preference.html', {'currencies': currency_data, 
+                                                    'user_preferences': user_preferences,
+                                                    'title':'Preference Page'})
 #Summary page       
 @login_required
 def Stats_View(request,*args, **kwargs):

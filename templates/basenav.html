@@ -86,25 +86,25 @@
             <div class="make-me-sticky">
           <h3>Total Income in the last 30 day:</h3>
           {% if totalincome == none %}
-            <p> 0 {{currency}} </p>
+            <p><b> 0 {{currency}} </b></p>
           {% else %}
-            <p> {{ totalincome }} {{currency}}</p>
+            <p><b>{{ totalincome }} {{currency}}</b> </p>
           {% endif %}
           </div>
           <div class="col">
           <h3>Total Expense in the last 30 day:</h3>
           {% if totalexpense == none %}
-            <p> 0 {{currency}} </p>
+            <p><b> 0 {{currency}} </b> </p>
           {% else %}
-            <p> {{ totalexpense }} {{currency}}</p>
+            <p><b>{{ totalexpense }} {{currency}} </b></p>
           {% endif %}
           </div>
           <div class="col">
           <h3>Total left:</h3>
           {% if totalleft == none %}
-            <p> 0 {{currency}} </p>
+            <p><b>0 {{currency}}</b></p>
           {% else %}
-            <p> {{ totalleft }} {{currency}}</p>
+            <p><b> {{ totalleft }} {{currency}}</b></p>  
           {% endif %}
         </div>
           </div>

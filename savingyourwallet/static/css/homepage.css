@@ -1,8 +1,7 @@
 
 
-.gradient{
-  background: rgb(6,190,182);
-  background: linear-gradient(180deg, rgba(6,190,182,1) 0%, rgba(72,177,191,0.5830707282913166) 100%);
+body{
+  font-family:Helvetica, sans-serif;
 }
  .page-header{
       margin-top: 3rem;
@@ -18,9 +17,11 @@ a {
 }
 main{
   margin-top: auto;
+  font-family:Helvetica, sans-serif;
 }
 
 [role="main"] {
+  font-family:Helvetica, sans-serif;
   padding-top: 133px; /* Space for fixed navbar */
 }
 

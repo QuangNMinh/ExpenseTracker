@@ -6,18 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.utils.timezone import now
 # Create your models here.
-class RegisterForm(UserCreationForm):
-    email = forms.EmailField()
-
-    class Meta:
-        model = User
-        fields = ["username", "email"]
-class UserUpdateForm(forms.ModelForm):
-    email = forms.EmailField()
-
-    class Meta:
-        model = User
-        fields = ['username', 'email','first_name','last_name']
+#Expense
 class Expense(models.Model):
     amount = models.FloatField()
     date = models.DateField(default=now)
@@ -31,7 +20,7 @@ class Expense(models.Model):
     class Meta:
         ordering: ['-date']
 
-
+#Category
 class Category(models.Model):
     name = models.CharField(max_length=255)
 
@@ -40,6 +29,7 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+#User income
 class UserIncome(models.Model):
     amount = models.FloatField()  # DECIMAL
     date = models.DateField(default=now)
@@ -52,8 +42,7 @@ class UserIncome(models.Model):
 
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(User,on_delete=models.CASCADE)
+#
 class UserPreference(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     currency=models.CharField(max_length=50 , blank=True, null=True)
